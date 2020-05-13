@@ -26,22 +26,9 @@ namespace BasicCalculator
         private void resultBox_TextChanged(object sender, EventArgs e)
         {
 
-
-            string operand1 = operand1Box.Text;
-            string operand2 = operand2Box.Text;
-            string operator1 = operatorBox.Text;
-
-            string pastOperand1 = operand1;
-            string pastOperand2 = operand2;
-            string pastOperator = operator1;
-            //If any of the textbox values have changed, change the result text box to be cleared
-            if(operand1 != pastOperand1 || operand2!= pastOperand2|| operator1 != pastOperator)
-            {
-                resultBox.Clear();
-            }
-
         }
-
+        
+        
         public bool IsPresent()
         {
             if (string.IsNullOrEmpty(operand1Box.Text))
@@ -80,7 +67,7 @@ namespace BasicCalculator
             }
             else
             {
-                MessageBox.Show("You must have numbers between 0 and 1,000,000.");
+                MessageBox.Show("You must have numbers between 0 and 1,000,000.","Invalid Number Error.");
                 return false;
             }
             
@@ -114,10 +101,10 @@ namespace BasicCalculator
             }
         }
 
-        public bool IsValidData(bool IsOperator, bool IsDecimal, bool IsPresent)
+        public bool IsValidData( bool IsPresent,bool IsOperator, bool IsDecimal)
         {
             //all three have to be true, otherwise, do not calculate the numbers.
-            if (IsOperator == true && IsDecimal == true && IsPresent == true)
+            if (IsPresent == true && IsDecimal == true && IsOperator)
             {
                 return true;
             }
@@ -159,9 +146,14 @@ namespace BasicCalculator
 
             decimal result =
                 decimal.Parse(resultBox.Text);
-            //formats the number to only have up to 4 decimal places.
-            string formattedResult = string.Format("{0:0.0000}", result);
-            return Convert.ToDecimal(formattedResult);
+            //formats the answer to 4 decimal places.
+            string answer =
+                result.ToString("f4");
+
+            //converts the formatted answer back to decimal so it can be returned without any conflicts with the method's datatype.
+            decimal formattedAnswer = decimal.Parse(answer);
+
+            return formattedAnswer;
 
         }
 
@@ -177,6 +169,16 @@ namespace BasicCalculator
         private void exitBtn_Click(object sender, EventArgs e)
         {
             Close();
+        }
+        //clears the text in result box when numbers are changed in either operand box.
+        private void operand1Box_TextChanged(object sender, EventArgs e)
+        {
+            resultBox.Clear();
+        }
+
+        private void operand2Box_TextChanged(object sender, EventArgs e)
+        {
+            resultBox.Clear();
         }
     }
 }
